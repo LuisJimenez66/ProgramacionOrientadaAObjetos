@@ -1,16 +1,15 @@
 from conexionBD import *
 class Coches:
     @staticmethod
-    def insertar(marca,color,modelo,velocidad,caballaje,plazas):
+    def insertar(color,marca,modelo,velocidad,caballaje,plazas):
         try:
             cursor.execute(
                 "insert into coches values(null,%s,%s,%s,%s,%s,%s)",
-                (marca,color,modelo,velocidad,caballaje,plazas)
+                (color,marca,modelo,velocidad,caballaje,plazas)
             )
             conexion.commit()
             return True
-        except Exception as e:  
-            print("No se pudo insertar: ", {e})
+        except:  
             return False
         
     @staticmethod
@@ -19,37 +18,34 @@ class Coches:
             cursor.execute("Select * from coches")   
             return cursor.fetchall()
         except:
-            print("\n\t..::No hay autos registrados::..")
             return []
 
     @staticmethod
-    def actualizar(marca,color,modelo,velocidad,caballaje,plazas, id_coche):
+    def actualizar(color,marca,modelo,velocidad,caballaje,plazas, id_coche):
         try:
             cursor.execute(
-                "update coches set marca=%s, color=%s, modelo=%s, velocidad=%s, caballaje=%s, plazas=%s where id_coche=%s",
-                (marca, color, modelo, velocidad, caballaje, plazas, id_coche)
+                "update coches set color=%s, marca=%s, modelo=%s, velocidad=%s, caballaje=%s, plazas=%s where id_coches=%s",
+                (color, marca, modelo, velocidad, caballaje, plazas, id_coche)
             )
             conexion.commit()
             return True
-        except Exception as e:
-            print("\t\n..::No se pudo actualizar::..", {e})
+        except:
             return False
 
     @staticmethod
     def eliminar(id_coche):
         try:
-            cursor.execute("delete from coches where id_coche=%s", (id_coche,))
+            cursor.execute("delete from coches where id_coches=%s", (id_coche,))
             conexion.commit()
             return True
-        except Exception as e:
-            print("\n\t..:: No se pudo elmiminar ::..", {e})
+        except:
             return False
 
     @staticmethod
     def check(id):
         try:
             cursor.execute(
-                "select * from operaciones where id_operacion=%s",(id,)
+                "select * from coches where id_coches=%s",(id,)
             )
             return cursor.fetchone()
         except:

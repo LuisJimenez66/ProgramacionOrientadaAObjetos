@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import messagebox
+from controller import controlador
 class View():
     def __init__(self,ventana):
         ventana.title("Coches system")
@@ -85,6 +86,11 @@ class View():
         txt_color=Entry(ventana)
         txt_color.pack(pady=5)
 
+        lbl_modelo=Label(ventana,text="Ingresa el modelo")
+        lbl_modelo.pack(pady=5)
+        txt_modelo=Entry(ventana)
+        txt_modelo.pack(pady=5)
+
         lbl_velocidad=Label(ventana,text="Ingresa la velocidad")
         lbl_velocidad.pack(pady=5)
         txt_velocidad=Entry(ventana)
@@ -99,7 +105,7 @@ class View():
         lbl_plazas.pack(pady=5)
         txt_plazas=Entry(ventana)
         txt_plazas.pack(pady=5)
-        btn_insertar=Button(ventana,text="Insertar") 
+        btn_insertar=Button(ventana,text="Insertar", command=lambda:controlador.Controlador.insertar_coches(txt_color.get(),txt_marca.get(),txt_modelo.get(), txt_velocidad.get(),txt_caba.get(),txt_plazas.get())) 
         btn_insertar.pack(pady=5)
         btn_volver=Button(ventana,text="Regresar", command=lambda:View.menu_acciones(ventana,tipo)) 
         btn_volver.pack(pady=5)   
@@ -110,11 +116,11 @@ class View():
         lbl_titulo=Label(ventana,text=("Bienvenido a consultar coches"))
         lbl_titulo.pack(pady=5) 
         filas=""
-        registros=[("1","Sida","Negro","2002","120","100","2")]
+        registros=controlador.Controlador.consultar_coches()
         num_nota=1
         if len(registros)>=1:
             for i in registros:
-                filas=filas+f"\nAuto: {num_nota} \n ID: {i[0]} -Marca: {i[1]} Color: {i[2]} Modelo: {i[3]} \n Velocidad: {i[4]} Caballaje: {i[5]} Plazas: {i[6]}\n"
+                filas=filas+f"\nAuto: {num_nota} \n ID: {i[0]} -Color: {i[1]} Marca: {i[2]} Modelo: {i[3]} \n Velocidad: {i[4]} Caballaje: {i[5]} Plazas: {i[6]}\n"
                 num_nota=num_nota+1
         else:
             messagebox.showinfo(icon=Warning, message="...No hay coches registrados...")
@@ -135,43 +141,73 @@ class View():
         id=IntVar()
         txt_id=Entry(ventana,textvariable=id)
         txt_id.pack()
-        btn_buscar=Button(ventana,text="Buscar", command=lambda:View.cambiar_autos2(ventana,tipo)) 
+        btn_buscar=Button(ventana,text="Buscar", command=lambda:controlador.Controlador.check_coches(ventana,tipo,id.get())) 
         btn_buscar.pack(pady=5)
         btn_volver=Button(ventana,text="Regresar", command=lambda:View.menu_acciones(ventana,tipo)) 
         btn_volver.pack(pady=5) 
 
 
     @staticmethod
-    def cambiar_autos2(ventana,tipo):
+    def cambiar_autos2(ventana,tipo,id,color,marca,modelo,velocidad,caballaje,plazas):
         View.borrar_pantalla(ventana)
         lbl_titulo=Label(ventana, text=f"Bienvenido a actualizar {tipo}")
         lbl_titulo.pack(pady=10)
 
-        lbl_marca=Label(ventana,text="Ingresa la marca")
-        lbl_marca.pack(pady=5)
-        txt_marca=Entry(ventana)
-        txt_marca.pack(pady=5)
+        var_id = StringVar()
+        var_color = StringVar()
+        var_marca = StringVar()
+        var_modelo = StringVar()
+        var_velocidad = StringVar()
+        var_caballaje = StringVar()
+        var_plazas = StringVar()
 
-        lbl_color=Label(ventana,text="Ingresa la color")
+        # Asignamos valores iniciales
+        var_id.set(id)
+        var_color.set(color)
+        var_marca.set(marca)
+        var_modelo.set(modelo)
+        var_velocidad.set(velocidad)
+        var_caballaje.set(caballaje)
+        var_plazas.set(plazas)
+
+        # ID (solo lectura)
+        lbl_id = Label(ventana, text="Id del coche:")
+        lbl_id.pack(pady=5)
+        txt_id = Entry(ventana, textvariable=var_id, state="disabled")
+        txt_id.pack(pady=5)
+
+
+
+        lbl_color = Label(ventana, text="Ingresa el color")
         lbl_color.pack(pady=5)
-        txt_color=Entry(ventana)
+        txt_color = Entry(ventana, textvariable=var_color)
         txt_color.pack(pady=5)
 
-        lbl_velocidad=Label(ventana,text="Ingresa la velocidad")
+        lbl_marca = Label(ventana, text="Ingresa la marca")
+        lbl_marca.pack(pady=5)
+        txt_marca = Entry(ventana, textvariable=var_marca)
+        txt_marca.pack(pady=5)
+
+        lbl_modelo = Label(ventana, text="Ingresa el modelo")
+        lbl_modelo.pack(pady=5)
+        txt_modelo = Entry(ventana, textvariable=var_modelo)
+        txt_modelo.pack(pady=5)
+
+        lbl_velocidad = Label(ventana, text="Ingresa la velocidad")
         lbl_velocidad.pack(pady=5)
-        txt_velocidad=Entry(ventana)
+        txt_velocidad = Entry(ventana, textvariable=var_velocidad)
         txt_velocidad.pack(pady=5)
 
-        lbl_caba=Label(ventana,text="Ingresa la caballaje")
+        lbl_caba = Label(ventana, text="Ingresa la caballaje")
         lbl_caba.pack(pady=5)
-        txt_caba=Entry(ventana)
+        txt_caba = Entry(ventana, textvariable=var_caballaje)
         txt_caba.pack(pady=5)
 
-        lbl_plazas=Label(ventana,text="Ingresa el no de plazas")
+        lbl_plazas = Label(ventana, text="Ingresa el no de plazas")
         lbl_plazas.pack(pady=5)
-        txt_plazas=Entry(ventana)
+        txt_plazas = Entry(ventana, textvariable=var_plazas)
         txt_plazas.pack(pady=5)
-        btn_actualizar=Button(ventana,text="Actualizar") 
+        btn_actualizar=Button(ventana,text="Actualizar",command=lambda:controlador.Controlador.cambiar_coches(var_color.get(),var_marca.get(),var_modelo.get(),var_velocidad.get(),var_caballaje.get(),var_plazas.get(),var_id.get())) 
         btn_actualizar.pack(pady=5)
         btn_volver=Button(ventana,text="Regresar", command=lambda:View.cambiar_autos(ventana,tipo)) 
         btn_volver.pack(pady=5)
@@ -186,28 +222,23 @@ class View():
         lbl_id.pack(pady=5) 
         txt_id=Entry(ventana,textvariable=id)
         txt_id.pack()          
-        btn_buscar=Button(ventana,text="Buscar", command=lambda:View.eliminar_autos2(ventana,tipo)) 
+        btn_buscar=Button(ventana,text="Buscar", command=lambda:controlador.Controlador.check_coches2(ventana,tipo,id.get())) 
         btn_buscar.pack(pady=5)
         btn_volver=Button(ventana,text="Regresar", command=lambda:View.menu_acciones(ventana,tipo)) 
         btn_volver.pack(pady=5) 
 
-    def eliminar_autos2(ventana,tipo):
+    def eliminar_autos2(ventana,tipo,id,color,marca,modelo,velocidad,caballaje,plazas):
         View.borrar_pantalla(ventana)
         lbl_titulo=Label(ventana,text=("Coche a eliminar: "))
         lbl_titulo.pack(pady=5) 
         filas=""
-        registros=[("1","Sida","Negro","2002","120","100","2")]
-        num_nota=1
-        if len(registros)>=1:
-            for i in registros:
-                filas=filas+f"\nAuto: {num_nota} \n ID: {i[0]} -Marca: {i[1]} Color: {i[2]} Modelo: {i[3]} \n Velocidad: {i[4]} Caballaje: {i[5]} Plazas: {i[6]}\n"
-                num_nota=num_nota+1
-        else:
-            messagebox.showinfo(icon=Warning, message="...No hay coches registrados...")
+
+        filas=filas+f"\n ID: {id} -Color: {color} Marca: {marca} Modelo: {modelo} \n Velocidad: {velocidad} Caballaje: {caballaje} Plazas: {plazas}\n"
+
         #Botones
         lbl_resultado=Label(ventana,text=f"{filas}")
         lbl_resultado.pack(pady=10)
-        btn_borrar=Button(ventana,text="Borrar") 
+        btn_borrar=Button(ventana,text="Borrar", command=lambda:controlador.Controlador.eliminar_coches(id)) 
         btn_borrar.pack(pady=5)
         btn_volver=Button(ventana,text="Regresar", command=lambda:View.eliminar_autos(ventana,tipo)) 
         btn_volver.pack(pady=5) 
