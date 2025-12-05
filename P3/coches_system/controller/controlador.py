@@ -57,4 +57,64 @@ class Controlador:
             messagebox.showinfo(message=f"Pasa")
             view1.View.eliminar_autos2(ventana,tipo,respuesta[0],respuesta[1],respuesta[2],respuesta[3],respuesta[4],respuesta[5],respuesta[6])
         else:
-            messagebox.showinfo(message=f"No pasa pa")        
+            messagebox.showinfo(message=f"No pasa pa")  
+
+class Controlador2:
+    @staticmethod
+    def coñete(respuesta):
+        if respuesta:
+            messagebox.showinfo(message=f"Accion realizada con exito")
+            return True
+        else:
+            messagebox.showinfo(message=f"Algo salio mal..")
+
+
+    @staticmethod
+    def insertar_camionetas(color,marca,modelo,velocidad,caballaje,plazas,traccion,cerrada):
+        respuesta=modelo1.Camionetas.insertar(color,marca,modelo,velocidad,caballaje,plazas,traccion,cerrada)
+        Controlador2.coñete(respuesta)
+
+    @staticmethod
+    def consultar_camionetas():
+        respuesta=modelo1.Camionetas.consultar()
+        return respuesta
+
+
+    @staticmethod
+    def cambiar_camionetas(color,marca,modelo,velocidad,caballaje,plazas,traccion,cerrada,id):
+        respuesta=modelo1.Camionetas.actualizar(color,marca,modelo,velocidad,caballaje,plazas,traccion,cerrada,id)
+        Controlador2.coñete(respuesta)
+
+
+    @staticmethod
+    def eliminar_camionetas(id):
+        confirmar = messagebox.askyesno(
+        "Confirmar eliminación",
+        "¿Estás seguro de que deseas eliminar esta camioneta?"
+        )
+        if confirmar:   # Si el usuario presiona YES
+            respuesta = modelo1.Camionetas.eliminar(id)
+            Controlador2.coñete(respuesta)
+        else:
+            # Puedes poner algo opcional, como un mensaje o nada
+            messagebox.showinfo("Cancelado", "La eliminación ha sido cancelada.")
+    
+    @staticmethod
+    def check_camionetas(ventana,tipo,id):
+        respuesta=modelo1.Camionetas.check(id)    
+        messagebox.showinfo(message=f"{respuesta}") 
+        if respuesta:
+            messagebox.showinfo(message=f"Pasa")
+            view1.View.cambiar_camionetas2(ventana,tipo,respuesta[0],respuesta[1],respuesta[2],respuesta[3],respuesta[4],respuesta[5],respuesta[6],respuesta[7],respuesta[8])
+        else:
+            messagebox.showinfo(message=f"No pasa pa")
+
+    @staticmethod
+    def check_camionetas2(ventana,tipo,id):
+        respuesta=modelo1.Camionetas.check(id)     
+        messagebox.showinfo(message=f"{respuesta}") 
+        if respuesta:
+            messagebox.showinfo(message=f"Pasa")
+            view1.View.eliminar_camionetas2(ventana,tipo,respuesta[0],respuesta[1],respuesta[2],respuesta[3],respuesta[4],respuesta[5],respuesta[6],respuesta[7],respuesta[8])
+        else:
+            messagebox.showinfo(message=f"No pasa pa")

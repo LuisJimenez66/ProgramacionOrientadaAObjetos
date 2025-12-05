@@ -53,11 +53,11 @@ class Coches:
 
 class Camionetas:
     @staticmethod
-    def insertar(marca,color,modelo,velocidad,caballaje,plazas,traccion,cerrada):
+    def insertar(color,marca,modelo,velocidad,caballaje,plazas,traccion,cerrada):
         try:
             cursor.execute(
                 "insert into camionetas values(null,%s,%s,%s,%s,%s,%s,%s,%s)",
-                (marca,color,modelo,velocidad,caballaje,plazas,traccion,cerrada)
+                (color,marca,modelo,velocidad,caballaje,plazas,traccion,cerrada)
             )
             conexion.commit()
             return True
@@ -71,20 +71,18 @@ class Camionetas:
             
             return cursor.fetchall()
         except:
-            print("\n\t..::No hay autos registrados::..")
             return []
         
     @staticmethod
-    def actualizar(marca,color,modelo,velocidad,caballaje,plazas, traccion, cerrada, id_camioneta):
+    def actualizar(color,marca,modelo,velocidad,caballaje,plazas, traccion, cerrada, id_camioneta):
         try:
             cursor.execute(
-                "update camionetas set marca=%s, color=%s, modelo=%s, velocidad=%s, caballaje=%s, plazas=%s,traccion=%s, cerrada=%s where id_camioneta=%s",
-                (marca, color, modelo, velocidad, caballaje, plazas, traccion, cerrada, id_camioneta)
+                "update camionetas set color=%s, marca=%s, modelo=%s, velocidad=%s, caballaje=%s, plazas=%s,traccion=%s, cerrada=%s where id_camioneta=%s",
+                (color, marca, modelo, velocidad, caballaje, plazas, traccion, cerrada, id_camioneta)
             )
             conexion.commit()
             return True
         except:
-            print("\t\n..::No se pudo actualizar::..")
             return False
         
     @staticmethod
@@ -94,14 +92,13 @@ class Camionetas:
             conexion.commit()
             return True
         except:
-            print("\n\t..:: No se pudo elmiminar ::..")
             return False
         
     @staticmethod
     def check(id):
         try:
             cursor.execute(
-                "select * from operaciones where id_operacion=%s",(id,)
+                "select * from camionetas where id_camioneta=%s",(id,)
             )
             return cursor.fetchone()
         except:
